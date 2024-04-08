@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { Post } from "./PostSchema";
 const userSchema = new Schema({
   name: {
     type: String,
@@ -23,14 +24,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  address: {
-    type: String,
-    required: true,
-  },
-  seller: {
+  ispublisher: {
     type: Boolean,
   },
-  cart: [String],
+  posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
 });
-const User = model("users", userSchema);
+const User: any = model("users", userSchema);
 export { User };

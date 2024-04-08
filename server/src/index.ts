@@ -1,7 +1,7 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { userRouter } from "./routes/userRoutes";
+import { userRouter } from "./routes/userRoutees";
 import { connect_db } from "./db/connect";
 import { verifyToken } from "./middlewares/authMiddleware";
 import { authUserRouter } from "./routes/authUserRoutes";
