@@ -37,14 +37,14 @@ const comparePassword = async (password: string, hashedPassword: string) => {
 const createJwt = (id: string) => {
   const token = jwt.sign(
     { _id: id },
-    jwtSecret,
+    jwtSecret
     //    {
     //   expiresIn: "24h",
     // }
   );
   return token;
 };
-const sendVerificationEmail = ( mailOptionsObject: any) => {
+const sendVerificationEmail = (mailOptionsObject: any) => {
   const mailOptions = {
     ...mailOptionsObject,
     from: "anshikthind@gmail.com", // Sender's email
