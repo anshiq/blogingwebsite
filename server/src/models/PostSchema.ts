@@ -32,9 +32,14 @@ const postSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+
+  time: {
+    type: Date,
+    default: Date.now,
+  },
   comments: [commentSchema],
   likes: Number,
   dislikes: Number,
 });
-const Post: any = model("posts", postSchema);
+const Post = model("posts", postSchema);
 export { Post };

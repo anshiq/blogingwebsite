@@ -9,8 +9,8 @@ import {
 } from "../Others/AuthFuntions";
 async function signupUser(req: Request, res: Response) {
   try {
-    const { name, email, seller, password, mobile, address } = req.body;
-    if (!name || !email || !password || !mobile || !address) {
+    const { name, email, isPublisher, password } = req.body;
+    if (!name || !email || !password  ) {
       return res
         .status(400)
         .json({ success: false, error: "All fields are required." });
@@ -26,11 +26,9 @@ async function signupUser(req: Request, res: Response) {
       name,
       email,
       password: hashedpassword,
-      mobile,
       verifyToken: token,
-      address: address,
       verified: false,
-      seller: seller,
+      ispublisher: isPublisher,
     });
     if (data) {
       const verificationLink = `${process.env.weburl}/user/verify-email?token=${token}`;

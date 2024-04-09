@@ -19,14 +19,10 @@ const userSchema = new Schema({
   verifyToken: {
     type: String,
   },
-  mobile: {
-    type: String,
-    required: true,
-  },
   ispublisher: {
     type: Boolean,
   },
-  wishListedPosts: [
+  readLater: [
     {
       type: Schema.Types.ObjectId,
       ref: "Post",
@@ -34,5 +30,5 @@ const userSchema = new Schema({
   ],
   posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
 });
-const User: any = model("users", userSchema);
+const User = model("users", userSchema);
 export { User };

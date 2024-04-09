@@ -1,4 +1,5 @@
 "use client";
+import { axiosFetchAdmin } from "@/lib/axiosConfig";
 import MonacoEditor from "@monaco-editor/react";
 import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
@@ -9,6 +10,8 @@ import styled from "styled-components";
 const RichTextEditor = () => {
   const [value, setValue] = useState("");
   const [selected, setSelected] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     const browser = document.getElementById("browser");
@@ -16,28 +19,62 @@ const RichTextEditor = () => {
       browser.innerHTML = value;
     }
   }, [value]);
+  const handleSubmit = async () => {
+    const token = localStorage.getItem("token") || "";
+    const k = await axiosFetchAdmin(token).post("/createPost", {
+      title: title,
+      description: description,
+      content: value,
+    });
+    console.log(k.data);
+    if (k.status === 201) {
+      alert(k.data.message);
+    } else {
+      alert("err occured while posting");
+    }
+  };
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/2 p-4 bg-gray-100 rounded-lg shadow-md">
-        <div className="mb-4 flex flex-row justify-between">
+    <div className="flex flex-col md:flex-row gap-4 p-4">
+      <div className="flex-1">
+        <div className="mb-4">
+          <label className="block font-bold mb-2">Title</label>
+          <input
+            type="text"
+            className="w-full border border-gray-300 rounded-md p-2"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <label className="block font-bold mb-2 mt-4">Meta description</label>
+          <textarea
+            className="w-full border border-gray-300 rounded-md p-2 h-20"
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+        <div className="mb-4 flex justify-between">
           <div>
             <button
               type="button"
               onClick={() => setSelected("code")}
-              className="px-4 py-2 mr-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
             >
               Code
             </button>
             <button
               type="button"
               onClick={() => setSelected("markdown")}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
             >
               Markdown
             </button>
+            <button
+              type="button"
+              onClick={() => handleSubmit()}
+              className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded mr-2"
+            >
+              Post Blog
+            </button>
           </div>
-          <button className="px-4 py-2 mr-2 bg-green-500 text-white rounded hover:bg-green-600">
+          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
             Refresh
           </button>
         </div>
@@ -47,10 +84,15 @@ const RichTextEditor = () => {
           <QuilSection setValue={setValue} value={value} />
         )}
       </div>
-      <div
-        id="browser"
-        className="w-1/2 p-4 bg-white rounded-lg shadow-md overflow-auto"
-      ></div>
+
+      <div className="flex-1  overflow-y-scroll shadow-black h-[90vh] shadow border-gray-300 rounded-md p-4 ml-2">
+        <label className="w-full">Preview Tab (No tailwind applied)</label>
+        <div
+          id="browser"
+          style={{ width: "100%" }}
+          className="no-tailwindcss"
+        ></div>
+      </div>
     </div>
   );
 };
