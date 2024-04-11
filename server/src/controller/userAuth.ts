@@ -28,9 +28,8 @@ async function signupUser(req: Request, res: Response) {
       password: hashedpassword,
 
       verifyToken: token,
-      address: address,
       verified: false,
-      seller: seller,
+      ispublisher: isPublisher,
     });
     if (data) {
       const verificationLink = `${process.env.weburl}/user/verify-email?token=${token}`;
