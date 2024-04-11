@@ -9,8 +9,8 @@ import {
 } from "../Others/AuthFuntions";
 async function signupUser(req: Request, res: Response) {
   try {
-    const { name, email, seller, password } = req.body;
-    if (!name || !email || !password || !mobile || !address) {
+    const { name, email, isPublisher, password } = req.body;
+    if (!name || !email || !password) {
       return res
         .status(400)
         .json({ success: false, error: "All fields are required." });
