@@ -9,7 +9,7 @@ import {
 } from "../Others/AuthFuntions";
 async function signupUser(req: Request, res: Response) {
   try {
-    const { name, email, seller, password, mobile, address } = req.body;
+    const { name, email, seller, password } = req.body;
     if (!name || !email || !password || !mobile || !address) {
       return res
         .status(400)
@@ -26,7 +26,7 @@ async function signupUser(req: Request, res: Response) {
       name,
       email,
       password: hashedpassword,
-      mobile,
+
       verifyToken: token,
       address: address,
       verified: false,
