@@ -7,6 +7,7 @@ import {
   hashPassword,
   sendVerificationEmail,
 } from "../Others/AuthFuntions";
+import { Post } from "../models/PostSchema";
 async function signupUser(req: Request, res: Response) {
   try {
     const { name, email, isPublisher, password } = req.body;
@@ -157,10 +158,21 @@ async function forgotPassword(req: Request, res: Response) {
     console.log(error);
   }
 }
+async function fetchposts(req: Request, res: Response) {
+  try {
+    const posts = await Post.find();
+    if (!posts) {
+      return res.status(400).json({ message: "unable to fetch posts" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
 export {
   signupUser,
   forgotPassword,
   loginUser,
   verifyEmailToken,
   verifyForgotPasswordToken,
+  fetchposts,
 };
