@@ -1,9 +1,6 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  corePlugins: {
-    preflight: false,
-  },
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -11,21 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      screens: {
+        mob: "40rem",
       },
     },
   },
   plugins: [],
-  layers: {
-    "no-tailwindcss": {
-      // Add any styles you want to disable here
-      ".no-tailwindcss": {
-        all: "unset",
-      },
-    },
-  },
 };
 export default config;

@@ -2,18 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-
-@layer base {
-  .no-tailwind-smell * {
-    @apply !reset !important;
-  }
+/* Initial styling */
+.transition-top {
+  transition: top 1s ease; /* You can adjust the duration and easing function as needed */
 }
-
-@layer no-tailwindcss {
-  /* This layer is disabled */
-  @variants {
-    .no-tailwindcss {
-      all: unset;
-    }
-  }
+.hide-scroll-bar{
+    -ms-overflow-style: none;
+}
+.hide-scroll-bar::-webkit-scrollbar{
+    display: none;
 }

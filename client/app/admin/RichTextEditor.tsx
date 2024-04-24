@@ -4,7 +4,10 @@ import MonacoEditor from "@monaco-editor/react";
 import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+
 import styled from "styled-components";
+import { Notify } from "../components/Notification";
+import { showNotification } from "@/lib/Notification";
 
 const RichTextEditor = () => {
   const [value, setValue] = useState("");
@@ -27,14 +30,15 @@ const RichTextEditor = () => {
     });
     console.log(k.data);
     if (k.status === 201) {
-      alert(k.data.message);
+      showNotification({ text: k.data.message, color: "green" });
+      // alert(k.data.message);
     } else {
-      alert("err occured while posting");
+      showNotification({ text: "errr while posting", color: "red" });
     }
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 p-4">
+    <div className="flex flex-col md:flex-row gap-4 p-4 bg-white">
       <div className="flex-1">
         <div className="mb-4">
           <label className="block font-bold mb-2">Title</label>
@@ -111,7 +115,7 @@ const CodeSelection = ({ setValue, value }: any) => {
   return (
     <EditorStyled>
       <MonacoEditor
-        height="100%"
+        height="60vh"
         width="100%"
         language={"html"}
         theme="vs-dark"

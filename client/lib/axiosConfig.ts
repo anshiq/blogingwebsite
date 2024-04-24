@@ -1,14 +1,12 @@
 import axios from "axios";
 const axiosFetch = axios.create({
-  baseURL: process.env.backendUrl,
-  // baseURL: "http://localhost:8080/user",
-  // baseURL: "http://localhost:8080",
+  baseURL: process.env.backendUrl + "/user",
   timeout: 8000,
 });
 
 const axiosFetchUser = (token: string) =>
   axios.create({
-    baseURL: process.env.backendUrl + "/authedAdmin",
+    baseURL: process.env.backendUrl + "/authedUser",
     headers: {
       Authorization: `${token}`,
     },

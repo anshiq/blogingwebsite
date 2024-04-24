@@ -46,4 +46,12 @@ async function commentOnPost(req: Request, res: Response) {
     res.status(500).json({ message: "Internal server error" });
   }
 }
-export { addToReadLater, commentOnPost };
+
+const displayname = async (req: Request, res: Response) => {
+  const user = await User.findById(req.userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  res.status(200).json({ data: { name: user.name }, success: true });
+};
+export { addToReadLater, commentOnPost, displayname };

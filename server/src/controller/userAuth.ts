@@ -11,6 +11,10 @@ import { Post } from "../models/PostSchema";
 async function signupUser(req: Request, res: Response) {
   try {
     const { name, email, isPublisher, password } = req.body;
+
+    console.log(req.body);
+    res.json({ success: false, data: { msg: "User already Exist..." } });
+    return;
     if (!name || !email || !password) {
       return res
         .status(400)
@@ -92,7 +96,7 @@ const verifyEmailToken = async (req: Request, res: Response) => {
     user.verified = true;
     user.verifyToken = undefined;
     await user.save(); // Save the updated user record
-    console.log(user);
+    // console.log(user);
     res.status(200).json({
       success: true,
       data: { msg: "User  verification successfully." },
@@ -107,12 +111,12 @@ const verifyEmailToken = async (req: Request, res: Response) => {
 async function verifyForgotPasswordToken(req: Request, res: Response) {
   try {
     const { token, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const hashedpassword = await hashPassword(password);
     const data = await User.findOne({ verifyToken: token });
     if (data) {
-      console.log(data.password);
-      console.log(hashedpassword);
+      // console.log(data.password);
+      // console.log(hashedpassword);
       data.verifyToken = undefined;
       data.verified = true;
       data.password = hashedpassword;
@@ -134,7 +138,7 @@ async function forgotPassword(req: Request, res: Response) {
     if (user) {
       const token = generateVerificationToken();
       user.verifyToken = token;
-      console.log(token);
+      // console.log(token);
       user.save();
       const verificationLink = `http://localhost:3000/user/reset-password?token=${token}`;
       const mailoptions = {

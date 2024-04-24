@@ -10,7 +10,7 @@ dotenv.config();
 const port: string | number = process.env.PORT || 8080;
 const uri: string = process.env.MONGOURI || "";
 const app: Express = express();
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: "20mb" }));
 app.use(cors());
 app.use("/user", userRouter);
 app.use("/authedUser", verifyToken, authUserRouter);

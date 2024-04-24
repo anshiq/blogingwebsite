@@ -11,14 +11,12 @@ function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("1");
-
     e.preventDefault();
     localStorage.clear();
     localStorage.removeItem("token");
     axiosFetch
       .post(
-        "/user/login",
+        "/login",
         {
           email: formData.email,
           password: formData.password,
@@ -27,7 +25,7 @@ function Login() {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       )
       .then((data) => {
         if (data.data.success) {
@@ -92,29 +90,31 @@ function SignUp() {
     email: "",
     password: "",
     repassword: "",
-    mobile: "",
+    isPublisher: false,
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(formData.name);
-
     e.preventDefault();
+    if (formData.repassword != formData.password) {
+      showNotification({ text: "password not matching", color: "red" });
+      return;
+    }
     axiosFetch
       .post(
-        "/user/signup",
+        "/signup",
         {
           name: formData.name,
-          mobile: formData.mobile,
           email: formData.email,
           password: formData.password,
+          isPublisher: formData.isPublisher,
         },
         {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       )
       .then((data) => {
         if (data.data.success) {
@@ -165,23 +165,6 @@ function SignUp() {
 
       <div className="mb-4">
         <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          className="mt-1 p-2 w-full border rounded-md"
-        />
-      </div>
-      <div className="mb-4">
-        <label
           htmlFor="repassword"
           className="block text-sm font-medium text-gray-700"
         >
@@ -197,23 +180,41 @@ function SignUp() {
           className="mt-1 p-2 w-full border rounded-md"
         />
       </div>
-
       <div className="mb-4">
         <label
-          htmlFor="mobile"
+          htmlFor="password"
           className="block text-sm font-medium text-gray-700"
         >
-          Mobile
+          Password
         </label>
         <input
-          type="text"
-          id="mobile"
-          name="mobile"
-          value={formData.mobile}
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
           onChange={handleChange}
           required
           className="mt-1 p-2 w-full border rounded-md"
         />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="" className="block text-sm font-medium text-gray-700">
+          Publisher Account
+          <input
+            type="checkbox"
+            name=""
+            checked={formData.isPublisher}
+            onChange={(e) => {
+              setFormData((prev) => ({
+                ...prev,
+                isPublisher: !formData.isPublisher,
+              }));
+            }}
+            // required
+            className=" m-2"
+          />
+        </label>
       </div>
 
       <button
@@ -231,7 +232,7 @@ function ForgotPassword() {
     e.preventDefault();
     axiosFetch
       .post(
-        "/user/forgot-password",
+        "/forgot-password",
         {
           email: email,
         },
@@ -239,7 +240,7 @@ function ForgotPassword() {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       )
       .then((data) => {
         if (data.data.success) {

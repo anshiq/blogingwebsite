@@ -18,7 +18,7 @@ function page(props: any) {
 }
 const VerifyEmail = async ({ token }: any) => {
   const data = await axiosFetch.post(
-    "/user/verify-user",
+    "/verify-user",
     {
       token: token,
     },

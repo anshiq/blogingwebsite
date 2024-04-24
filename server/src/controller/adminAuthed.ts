@@ -6,7 +6,7 @@ async function createPost(req: Request, res: Response) {
   const { title, description, content } = req.body;
   const user = await User.findById(userId);
 
-  console.log(userId, user, req.body);
+  // console.log(userId, user, req.body);
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
