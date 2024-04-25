@@ -2,7 +2,9 @@
 import { axiosFetch, axiosFetchUser } from "@/lib/axiosConfig";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 function Navbar() {
+  const Router = useRouter();
   const [toggleNav, setToggleNav] = useState(false);
   const [user, setUser] = useState(null);
   const [isPublisher, setIsPublisher] = useState(false);
@@ -49,12 +51,6 @@ function Navbar() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  useEffect(() => {
-    if (searchText.length < 1) return;
-    axiosFetch
-      .post("/search-posts", { text: searchText })
-      .then((data) => console.log(data));
-  }, [searchText]);
 
   return (
     <nav className="bg-gray-800 mob:p-4 p-0 w-full">
@@ -71,13 +67,23 @@ function Navbar() {
           }
         >
           <ul className="flex mob:space-x-4 mob:gap-0 gap-2 flex-col items-center justify-center mob:flex-row ">
-            <li className="text-white">
-              <input
-                className="text-black p-2  "
-                type="search"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-              />
+            <li className="bg-white rounded-md">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  Router.push("/search?text=" + searchText);
+                }}
+              >
+                <input
+                  className="text-black p-2 rounded-l-md outline-none"
+                  type="search"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+                <button type="submit" className="bg-blue-500 rounded-r-md p-2">
+                  Search
+                </button>
+              </form>
             </li>
           </ul>
           <ul className="flex mob:space-x-4 mob:gap-0 gap-2 items-center justify-center flex-col mob:flex-row ">

@@ -5,8 +5,8 @@ async function createPost(req: Request, res: Response) {
   const userId = req.userId;
   const { title, description, content } = req.body;
   const user = await User.findById(userId);
-
-  // console.log(userId, user, req.body);
+  const uploadedFile = req.file;
+  console.log(uploadedFile?.filename);
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }

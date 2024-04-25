@@ -10,9 +10,19 @@ import {
 import { Post } from "../models/PostSchema";
 
 async function searchPosts(req: Request, res: Response) {
-  const text = req.body.text;
-  console.log(text);
-  res.send(text);
+  const searchText = req.body.text;
+
+  try {
+    const regex = new RegExp(searchText, "i");
+    const posts = await Post.find({
+      $or: [{ title: { $regex: regex } }, { description: { $regex: regex } }],
+    });
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
 }
 async function signupUser(req: Request, res: Response) {
   try {

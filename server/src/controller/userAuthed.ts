@@ -22,41 +22,63 @@ async function addToReadLater(req: Request, res: Response) {
   }
 }
 
-async function commentOnPost(req: Request, res: Response) {
-  const postId = req.body.postId;
-  const userId = req.userId;
-  const comment = req.body.comment;
+// async function commentOnPost(req: Request, res: Response) {
+//   const postId = req.body.postId;
+//   const userId = req.userId;
+//   const comment = req.body.comment;
+//   try {
+//     const post = await Post.findById(postId);
+//     if (!post) {
+//       return res.status(404).json({ message: "Post not found" });
+//     }
+//     const user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+//     post.comments.push({
+//       userId: userId,
+//       text: comment,
+//     });
+//     await post.save();
+//     res.status(200).json({ message: "success fully commented on post" });
+//   } catch (error) {
+//     console.error("Error adding post to read later:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// }
+
+const likePost = async (req: Request, res: Response) => {
   try {
-    const post = await Post.findById(postId);
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" });
-    }
-    const user = await User.findById(userId);
+    const postId = req.body._id;
+    const user = await User.findById(req.userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    post.comments.push({
-      userId: userId,
-      text: comment,
+    const post = await Post.findByIdAndUpdate(postId, {
+      $addToSet: { likes: user._id },
     });
-    await post.save();
-    res.status(200).json({ message: "success fully commented on post" });
-  } catch (error) {
-    console.error("Error adding post to read later:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
 
+    res.status(200).json({
+      data: { name: user.name, isLiked: true },
+      success: true,
+    });
+  } catch (error) {
+    res.send({ err: error });
+  }
+};
 const displayname = async (req: Request, res: Response) => {
   const user = await User.findById(req.userId);
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
-  res
-    .status(200)
-    .json({
-      data: { name: user.name, isPublisher: user.ispublisher },
-      success: true,
-    });
+  res.status(200).json({
+    data: { name: user.name, isPublisher: user.ispublisher },
+    success: true,
+  });
 };
-export { addToReadLater, commentOnPost, displayname };
+export {
+  addToReadLater,
+  // commentOnPost,
+  displayname,
+  likePost,
+};

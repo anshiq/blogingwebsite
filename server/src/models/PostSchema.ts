@@ -15,6 +15,7 @@ const commentSchema = new Schema({
     default: Date.now,
   },
 });
+
 const postSchema = new Schema({
   title: {
     type: String,
@@ -32,14 +33,18 @@ const postSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-
   time: {
     type: Date,
     default: Date.now,
   },
-  comments: [commentSchema],
-  likes: Number,
-  dislikes: Number,
+  likes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      unique: true, // Ensures uniqueness of user IDs in the array
+    },
+  ],
 });
+
 const Post = model("posts", postSchema);
 export { Post };
