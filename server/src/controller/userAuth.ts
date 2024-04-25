@@ -8,13 +8,15 @@ import {
   sendVerificationEmail,
 } from "../Others/AuthFuntions";
 import { Post } from "../models/PostSchema";
+
+async function searchPosts(req: Request, res: Response) {
+  const text = req.body.text;
+  console.log(text);
+  res.send(text);
+}
 async function signupUser(req: Request, res: Response) {
   try {
     const { name, email, isPublisher, password } = req.body;
-
-    console.log(req.body);
-    res.json({ success: false, data: { msg: "User already Exist..." } });
-    return;
     if (!name || !email || !password) {
       return res
         .status(400)
@@ -61,6 +63,13 @@ async function loginUser(req: Request, res: Response) {
     if (data) {
       const isUser = await comparePassword(password, data.password);
       if (isUser) {
+        if (data.verified === false) {
+          res.send({
+            success: true,
+            data: { msg: "verify your email first" },
+          });
+          return;
+        }
         const token = createJwt(data._id.toString());
         res.json({
           success: true,
@@ -179,4 +188,5 @@ export {
   verifyEmailToken,
   verifyForgotPasswordToken,
   fetchposts,
+  searchPosts,
 };

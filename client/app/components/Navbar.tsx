@@ -1,9 +1,12 @@
 "use client";
-import { axiosFetchUser } from "@/lib/axiosConfig";
+import { axiosFetch, axiosFetchUser } from "@/lib/axiosConfig";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 function Navbar() {
   const [toggleNav, setToggleNav] = useState(false);
   const [user, setUser] = useState(null);
+  const [isPublisher, setIsPublisher] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -14,6 +17,8 @@ function Navbar() {
           .then((data) => {
             if (data.data.success) {
               setUser(data.data.data);
+              setIsPublisher(data.data.data.isPublisher);
+              // console.log(data.data.data.isPublisher);
             }
           });
       } catch (error) {
@@ -44,6 +49,13 @@ function Navbar() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  useEffect(() => {
+    if (searchText.length < 1) return;
+    axiosFetch
+      .post("/search-posts", { text: searchText })
+      .then((data) => console.log(data));
+  }, [searchText]);
+
   return (
     <nav className="bg-gray-800 mob:p-4 p-0 w-full">
       <div className="container mx-auto flex justify-between items-center">
@@ -59,11 +71,35 @@ function Navbar() {
           }
         >
           <ul className="flex mob:space-x-4 mob:gap-0 gap-2 flex-col items-center justify-center mob:flex-row ">
-            <li className="text-white">Products</li>
-            <li className="text-white">Solutions</li>
+            <li className="text-white">
+              <input
+                className="text-black p-2  "
+                type="search"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </li>
           </ul>
           <ul className="flex mob:space-x-4 mob:gap-0 gap-2 items-center justify-center flex-col mob:flex-row ">
-            <li className="text-white">Contact</li>
+            {isPublisher && user ? (
+              <>
+                <li className="text-white">
+                  <Link
+                    className="p-2 bg-orange-600 rounded-md"
+                    href="/admin/panel"
+                  >
+                    Manage Posts
+                  </Link>
+                </li>
+                <li className="text-white">
+                  <Link className="p-2 bg-orange-600 rounded-md" href="/admin">
+                    Post Blog
+                  </Link>
+                </li>
+              </>
+            ) : (
+              user && <></>
+            )}
             <li onClick={() => setToggleNav(!toggleNav)} className="text-white">
               {!user ? <a href="/user?type=0">Login</a> : <User data={user} />}
             </li>

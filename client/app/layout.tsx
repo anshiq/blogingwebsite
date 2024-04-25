@@ -20,7 +20,7 @@ export default function RootLayout({
           id="notification"
         ></div>
         <Navbar />
-        <div className="bg-gray-700 flex-grow">{children}</div>
+        <div className="bg-white flex-grow">{children}</div>
       </body>
     </html>
   );

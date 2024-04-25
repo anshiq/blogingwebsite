@@ -5,7 +5,8 @@ import {
   signupUser,
   verifyEmailToken,
   verifyForgotPasswordToken,
-  fetchposts
+  fetchposts,
+  searchPosts,
 } from "../controller/userAuth";
 
 const userRouter = Router();
@@ -15,4 +16,6 @@ userRouter.route("/verify-user").post(verifyEmailToken);
 userRouter.route("/forgot-password").post(forgotPassword);
 userRouter.route("/verify-forgot-token").post(verifyForgotPasswordToken);
 userRouter.route("/fetch-posts").get(fetchposts);
+userRouter.route("/search-posts").post(searchPosts);
+
 export { userRouter };

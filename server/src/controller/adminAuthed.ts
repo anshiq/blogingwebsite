@@ -31,6 +31,33 @@ async function createPost(req: Request, res: Response) {
   }
 }
 
+async function deletePost(req: Request, res: Response) {
+  const userId = req.userId;
+  const postId = req.body.id;
+
+  try {
+    const data = await Post.findOneAndDelete({ _id: postId, writer: userId });
+
+    if (!data) {
+      return res.status(404).json({ error: "Post not found or unauthorized" });
+    }
+
+    return res.status(200).json({ message: "Post deleted successfully" });
+  } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+async function getAdminPosts(req: Request, res: Response) {
+  const adminId = req.userId;
+  const user = await User.findById(adminId);
+  if (user?.ispublisher) {
+    const post = await Post.find({ writer: adminId });
+    res.send(post);
+    return;
+  }
+  res.send({ err: true });
+}
+
 async function editPost(req: Request, res: Response) {
   const userId = req.userId;
   const postId = req.body.postId;
@@ -56,22 +83,4 @@ async function editPost(req: Request, res: Response) {
     return res.status(500).json({ error: "Internal server error" });
   }
 }
-
-async function deletePost(req: Request, res: Response) {
-  const userId = req.userId;
-  const postId = req.body.postId;
-
-  try {
-    const data = await Post.findOneAndDelete({ _id: postId, writer: userId });
-
-    if (!data) {
-      return res.status(404).json({ error: "Post not found or unauthorized" });
-    }
-
-    return res.status(200).json({ message: "Post deleted successfully" });
-  } catch (err) {
-    return res.status(500).json({ error: "Internal server error" });
-  }
-}
-
-export { createPost, editPost, deletePost };
+export { createPost, editPost, deletePost, getAdminPosts };
