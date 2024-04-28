@@ -4,9 +4,7 @@ import MonacoEditor from "@monaco-editor/react";
 import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
 import styled from "styled-components";
-import { Notify } from "../components/Notification";
 import { showNotification } from "@/lib/Notification";
 
 const RichTextEditor = () => {
@@ -14,6 +12,7 @@ const RichTextEditor = () => {
   const [selected, setSelected] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState();
 
   useEffect(() => {
     const browser = document.getElementById("browser");
@@ -23,11 +22,12 @@ const RichTextEditor = () => {
   }, [value]);
   const handleSubmit = async () => {
     const token = localStorage.getItem("token") || "";
-    const k = await axiosFetchAdmin(token).post("/createPost", {
-      title: title,
-      description: description,
-      content: value,
-    });
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("content", value);
+    formData.append("image", image);
+    const k = await axiosFetchAdmin(token).post("/createPost", formData);
     console.log(k.data);
     if (k.status === 201) {
       showNotification({ text: k.data.message, color: "green" });
@@ -51,6 +51,13 @@ const RichTextEditor = () => {
           <textarea
             className="w-full border border-gray-300 rounded-md p-2 h-20"
             onChange={(e) => setDescription(e.target.value)}
+          />
+          <label className="block font-bold mb-2 mt-4">Thumbnail</label>
+          <input
+            type="file"
+            accept="image/*"
+            required
+            onChange={(e) => setImage(e.target.files[0])}
           />
         </div>
         <div className="mb-4 flex justify-between">

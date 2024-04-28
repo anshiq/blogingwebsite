@@ -12,11 +12,27 @@ export default function Page(props: any) {
       .post("/search-posts", { text: searchText })
       .then((data) => setPosts(data.data));
   }, [searchText]);
+
   return (
-    <div>
-      {posts.map((each) => (
-        <>each.title</>
-      ))}
+    <div className="container mx-auto py-8">
+      <div className="grid grid-cols-1">
+        {posts.map((each, index) => (
+          <div
+            key={index}
+            className="flex flex-col md:flex-row bg-white rounded-lg shadow-md mb-6"
+          >
+            <img
+              src={process.env.backendUrl + "/static/" + each.thumbnail}
+              alt={each.title}
+              className="w-full md:w-1/3 h-auto"
+            />
+            <div className="p-6 md:w-2/3">
+              <h2 className="text-xl font-semibold mb-2">{each.title}</h2>
+              <p className="text-gray-600 mb-4">{each.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
