@@ -2,32 +2,34 @@ import { Request, Response } from "express";
 import { User } from "../models/userSchema";
 import { Post } from "../models/PostSchema";
 async function createPost(req: Request, res: Response) {
-  const userId = req.userId;
-  const { title, description, content } = req.body;
-  const user = await User.findById(userId);
-  const uploadedFile = req.file;
-  console.log(uploadedFile?.filename);
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-  if (user.ispublisher != true) {
-    return res.status(404).json({ error: "User is not publisher" });
-  }
-
   try {
+    const userId = req.userId;
+    const { title, description, content } = req.body;
+    const user = await User.findById(userId);
+    const uploadedFile = req.file;
+    console.log(uploadedFile?.filename);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    if (user.ispublisher != true) {
+      return res.status(404).json({ error: "User is not publisher" });
+    }
+
     const data = await Post.create({
       title,
       description,
       content,
+      thumbnail: uploadedFile?.filename,
       writer: user._id,
-      likes: 0,
+      likes: [],
       dislikes: 0,
       comments: [],
     });
 
     return res.status(201).json({ message: "Post created successfully", data });
   } catch (err) {
-    return res.status(500).json({ error: "Internal server error" });
+    console.log(err);
+    return res.status(500).json({ error: "Internal server error", err });
   }
 }
 

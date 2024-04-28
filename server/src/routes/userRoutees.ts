@@ -7,6 +7,7 @@ import {
   verifyForgotPasswordToken,
   fetchposts,
   searchPosts,
+  getOnepost,
 } from "../controller/userAuth";
 
 const userRouter = Router();
@@ -17,5 +18,6 @@ userRouter.route("/forgot-password").post(forgotPassword);
 userRouter.route("/verify-forgot-token").post(verifyForgotPasswordToken);
 userRouter.route("/fetch-posts").get(fetchposts);
 userRouter.route("/search-posts").post(searchPosts);
+userRouter.route("/get-one-post").post(getOnepost);
 
 export { userRouter };

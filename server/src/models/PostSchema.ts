@@ -25,6 +25,7 @@ const postSchema = new Schema({
     type: String,
     required: true,
   },
+  thumbnail: String,
   content: {
     type: String,
     required: true,

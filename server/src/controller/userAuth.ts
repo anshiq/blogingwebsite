@@ -16,7 +16,7 @@ async function searchPosts(req: Request, res: Response) {
     const regex = new RegExp(searchText, "i");
     const posts = await Post.find({
       $or: [{ title: { $regex: regex } }, { description: { $regex: regex } }],
-    });
+    }).select("title description thumbnail");
 
     res.json(posts);
   } catch (err) {
@@ -183,12 +183,27 @@ async function forgotPassword(req: Request, res: Response) {
 }
 async function fetchposts(req: Request, res: Response) {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().select("title description thumbnail");
     if (!posts) {
-      return res.status(400).json({ message: "unable to fetch posts" });
+      return res.status(400).json({ message: "Unable to fetch posts" });
     }
+    return res.status(200).json(posts);
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+async function getOnepost(req: Request, res: Response) {
+  try {
+    const postId = req.body.postId;
+    const posts = await Post.findById(postId);
+    if (!posts) {
+      return res.status(400).json({ message: "Unable to fetch posts" });
+    }
+    return res.status(200).json(posts);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 export {
@@ -199,4 +214,5 @@ export {
   verifyForgotPasswordToken,
   fetchposts,
   searchPosts,
+  getOnepost,
 };

@@ -15,7 +15,7 @@ async function addToReadLater(req: Request, res: Response) {
     }
     user.readLater.push(post._id);
     await user.save();
-    res.status(200).json({ message: "Post added to read later list" });
+    res.status(200).json({ message: "Post added to read later list", post });
   } catch (error) {
     console.error("Error adding post to read later:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -76,9 +76,29 @@ const displayname = async (req: Request, res: Response) => {
     success: true,
   });
 };
+const readLaterPost = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const posts = await Promise.all(
+      user.readLater.map(async (postId) => {
+        return await Post.findById(postId);
+      }),
+    );
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 export {
   addToReadLater,
   // commentOnPost,
   displayname,
   likePost,
+  readLaterPost,
 };
