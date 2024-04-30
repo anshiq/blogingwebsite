@@ -22,8 +22,6 @@ async function createPost(req: Request, res: Response) {
       thumbnail: uploadedFile?.filename,
       writer: user._id,
       likes: [],
-      dislikes: 0,
-      comments: [],
     });
 
     return res.status(201).json({ message: "Post created successfully", data });

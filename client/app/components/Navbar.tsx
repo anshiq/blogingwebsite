@@ -55,8 +55,8 @@ function Navbar() {
   return (
     <nav className="bg-gray-800 mob:p-4 p-0 w-full">
       <div className="container mx-auto flex justify-between items-center">
-        <span className="text-white text-lg font-bold w-[11rem]">
-          My Full Project
+        <span className="text-white text-lg font-bold w-[11rem] mr-2 ">
+        Blogging Website
         </span>
         <div
           className={

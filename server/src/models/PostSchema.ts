@@ -41,9 +41,7 @@ const postSchema = new Schema({
   likes: [
     {
       type: Schema.Types.ObjectId,
-      ref: "User",
-      unique: true, // Ensures uniqueness of user IDs in the array
-    },
+      ref: "User",    },
   ],
 });
 

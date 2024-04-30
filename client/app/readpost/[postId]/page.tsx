@@ -6,6 +6,7 @@ function Page({ params }: any) {
   const [post, setPost] = useState<any>(null);
 
   useEffect(() => {
+    if(post !=null) return;
     const fetchPost = async () => {
       try {
         const response = await axiosFetch.post("/get-one-post", {

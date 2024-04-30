@@ -88,7 +88,10 @@ const readLaterPost = async (req: Request, res: Response) => {
         return await Post.findById(postId);
       }),
     );
-
+    if (posts[0] ===null){
+      res.status(200).json([]);
+      return
+    }
     res.status(200).json(posts);
   } catch (error) {
     console.error("Error:", error);

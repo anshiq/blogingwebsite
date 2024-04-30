@@ -197,13 +197,14 @@ async function getOnepost(req: Request, res: Response) {
   try {
     const postId = req.body.postId;
     const posts = await Post.findById(postId);
-    if (!posts) {
-      return res.status(400).json({ message: "Unable to fetch posts" });
+    if (posts) {
+      res.status(200).json(posts);
+    } else {
+      res.status(400).json({ message: "Unable to fetch posts" });
     }
-    return res.status(200).json(posts);
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 }
 export {
